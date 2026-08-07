@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const dashboardController = require("../controllers/Dashboard.controller.JS");
+const dashboardController = require("../controllers/dashboard.controller");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 const { validarDispositivo } = require("../controllers/dispositivo.controller");
