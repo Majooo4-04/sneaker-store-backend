@@ -7,7 +7,7 @@ const marcaRoutes = require("./routes/marca.routes");
 const favoritoRoutes = require("./routes/favorito.routes");
 const carritoRoutes = require("./routes/carrito.routes");
 const pedidoRoutes = require("./routes/pedido.routes");
-const dashboardRoutes = require("./routes/dashboard.routes");
+const dashboardRoutes = require("./routes/Dashboard.routes.JS");
 const dispositivoRoutes = require("./routes/dispositivo.routes");
 const inventarioRoutes = require("./routes/inventario.routes");
 
