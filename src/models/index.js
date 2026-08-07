@@ -12,7 +12,7 @@ const DetalleCarrito = require("./DetalleCarrito");
 const Favorito = require("./Favorito");
 const Marca = require("./Marca");
 
-const MovimientoInventario = require("./MovimientoInventario");
+const MovimientoInventario = require("./Movimientoinventario");
 const DispositivoVinculado = require("./DispositivoVinculado");
 
 // ======================================

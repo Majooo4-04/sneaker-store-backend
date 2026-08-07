@@ -14,11 +14,26 @@ const inventarioRoutes = require("./routes/inventario.routes");
 const app = express();
 
 
-app.use(cors());
+// ===============================
+// CONFIGURACIÓN CORS
+// ===============================
+
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://tu-frontend.vercel.app"
+    ],
+    credentials: true
+}));
+
+
 app.use(express.json());
 
 
-// RUTAS
+// ===============================
+// RUTAS API
+// ===============================
+
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/productos", productoRoutes);
 app.use("/api/marcas", marcaRoutes);
@@ -28,6 +43,11 @@ app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/admin", dashboardRoutes);
 app.use("/api/dispositivos", dispositivoRoutes);
 app.use("/api/inventario", inventarioRoutes);
+
+
+// ===============================
+// PRUEBA DEL SERVIDOR
+// ===============================
 
 app.get("/", (req, res) => {
     res.json({
