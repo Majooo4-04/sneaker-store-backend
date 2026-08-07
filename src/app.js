@@ -7,7 +7,7 @@ const marcaRoutes = require("./routes/marca.routes");
 const favoritoRoutes = require("./routes/favorito.routes");
 const carritoRoutes = require("./routes/carrito.routes");
 const pedidoRoutes = require("./routes/pedido.routes");
-const dashboardRoutes = require("./routes/Dashboard.routes.JS");
+const dashboardRoutes = require("./routes/dashboard.routes.js");
 const dispositivoRoutes = require("./routes/dispositivo.routes");
 const inventarioRoutes = require("./routes/inventario.routes");
 
@@ -40,7 +40,7 @@ app.use("/api/marcas", marcaRoutes);
 app.use("/api/favoritos", favoritoRoutes);
 app.use("/api/carritos", carritoRoutes);
 app.use("/api/pedidos", pedidoRoutes);
-app.use("/api/admin", dashboardRoutes);
+app.use("/api/admin",  dashboardRoutes);
 app.use("/api/dispositivos", dispositivoRoutes);
 app.use("/api/inventario", inventarioRoutes);
 
