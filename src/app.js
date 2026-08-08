@@ -21,7 +21,7 @@ const app = express();
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://tu-frontend.vercel.app"
+        "https://sneaker-store-frontend-pi.vercel.app"
     ],
     credentials: true
 }));
