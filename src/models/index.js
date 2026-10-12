@@ -14,6 +14,7 @@ const Marca = require("./Marca");
 
 const MovimientoInventario = require("./Movimientoinventario");
 const DispositivoVinculado = require("./DispositivoVinculado");
+const Resena = require("./Resena");
 
 // ======================================
 // USUARIO - PEDIDO
@@ -229,6 +230,11 @@ DispositivoVinculado.belongsTo(Usuario, {
     foreignKey: "id_usuario",
     as: "usuario"
 });
+Usuario.hasMany(Resena, { foreignKey: "id_usuario", as: "resenas" });
+Resena.belongsTo(Usuario, { foreignKey: "id_usuario", as: "usuario" });
+
+Producto.hasMany(Resena, { foreignKey: "id_producto", as: "resenas" });
+Resena.belongsTo(Producto, { foreignKey: "id_producto", as: "producto" });
 // ======================================
 // EXPORTAR
 // ======================================
@@ -255,6 +261,7 @@ module.exports = {
     Marca,
 
     MovimientoInventario,
-    DispositivoVinculado
+    DispositivoVinculado,
+    Resena
 
 };

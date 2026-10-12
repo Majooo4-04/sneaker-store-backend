@@ -10,8 +10,11 @@ const pedidoRoutes = require("./routes/pedido.routes");
 const dashboardRoutes = require("./routes/dashboard.routes.js");
 const dispositivoRoutes = require("./routes/dispositivo.routes");
 const inventarioRoutes = require("./routes/inventario.routes");
+const resenaRoutes = require("./routes/resena.routes");
+const path = require("path");
 
 const app = express();
+app.set("trust proxy", 1);
 
 
 // ===============================
@@ -22,7 +25,11 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
          "https://sneaker-store-frontend-kcfgb1fz5-sneaker-store1.vercel.app",
-         "https://sneaker-store-frontend-pi.vercel.app"
+         "https://sneaker-store-frontend-pi.vercel.app",
+         "http://localhost:8101",
+         "http://localhost:8100",
+         "http://localhost",
+        "https://localhost",
     ],
     credentials: true
 })
@@ -30,6 +37,7 @@ app.use(cors({
 
 
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 // ===============================
@@ -45,6 +53,7 @@ app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/admin",  dashboardRoutes);
 app.use("/api/dispositivos", dispositivoRoutes);
 app.use("/api/inventario", inventarioRoutes);
+app.use("/api/resenas", resenaRoutes);
 
 
 // ===============================
