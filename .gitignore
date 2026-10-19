@@ -36,3 +36,5 @@ coverage/
 # Archivos de configuración local
 *.local
 src/uploads/
+
+src/uploads/
