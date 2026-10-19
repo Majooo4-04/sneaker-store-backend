@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
+const cloudinary = require("cloudinary").v2;
 
 const auth = require("../middleware/auth");
 const { Pedido, DetallePedido, Producto, Resena } = require("../models");
@@ -13,30 +11,49 @@ const ESTADOS_VALIDOS = ["ENTREGADO"];
 // AJUSTAR: cómo tu middleware auth guarda al usuario en la petición
 const idUsuario = (req) => req.usuario.id_usuario;
 
-// ---------- Fotos ----------
-const UPLOADS = path.join(__dirname, "..", "uploads");
-fs.mkdirSync(UPLOADS, { recursive: true });
+// ---------- Fotos (Cloudinary) ----------
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
+// La foto se recibe en memoria y se sube directo a Cloudinary (nada se escribe en disco)
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: UPLOADS,
-        filename: (req, file, cb) =>
-            cb(null, crypto.randomUUID() + (path.extname(file.originalname) || ".jpg"))
-    }),
+    storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => cb(null, file.mimetype.startsWith("image/"))
 });
 
-const borrarArchivo = (nombre) =>
-    nombre && fs.unlink(path.join(UPLOADS, nombre), () => {});
+const subirFoto = (buffer) =>
+    new Promise((resolve, reject) => {
+        cloudinary.uploader
+            .upload_stream(
+                { folder: "snapreview/resenas", resource_type: "image" },
+                (err, result) => (err ? reject(err) : resolve(result))
+            )
+            .end(buffer);
+    });
+
+// Borra la imagen de Cloudinary a partir de su URL (ignora fotos antiguas guardadas en disco)
+const borrarFoto = (url) => {
+    if (!url || !url.startsWith("http")) return;
+    const m = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-z0-9]+$/i);
+    if (m) cloudinary.uploader.destroy(m[1]).catch(() => {});
+};
 
 // ---------- Utilidades ----------
+const urlFoto = (req, foto) =>
+    foto && foto.startsWith("http")
+        ? foto
+        : `${req.protocol}://${req.get("host")}/uploads/${foto}`; // reseñas antiguas
+
 const aDTO = (req, r) => ({
     id: String(r.id_resena),
     pedidoId: `${r.id_pedido}-${r.id_producto}`,
     productoId: r.id_producto,
     productoNombre: r.producto ? r.producto.nombre : "",
-    fotoUrl: `${req.protocol}://${req.get("host")}/uploads/${r.foto}`,
+    fotoUrl: urlFoto(req, r.foto),
     comentario: r.comentario,
     calificacion: r.calificacion,
     recomienda: r.recomienda === null ? null : !!r.recomienda,
@@ -126,7 +143,6 @@ router.get("/", auth, async (req, res) => {
 
 // ---------- Crear ----------
 router.post("/", auth, upload.single("foto"), async (req, res) => {
-    const quitarFoto = () => req.file && borrarArchivo(req.file.filename);
     try {
         const idPedido = parseInt(req.body.pedidoId, 10);
         const idProducto = parseInt(req.body.productoId, 10);
@@ -139,52 +155,55 @@ router.post("/", auth, upload.single("foto"), async (req, res) => {
             where: { id_pedido: idPedido, id_producto: idProducto }
         });
         if (!pedido || !detalle) {
-            quitarFoto();
             return res.status(403).json({ error: "Ese pedido no está a tu nombre o aún no se entrega." });
         }
         if (await Resena.findOne({ where: { id_pedido: idPedido, id_producto: idProducto } })) {
-            quitarFoto();
             return res.status(409).json({ error: "Ese producto ya tiene una reseña." });
         }
         if (!req.file) return res.status(400).json({ error: "Agrega una foto del producto." });
 
         const campos = leerCampos(req.body);
         const problema = validar(campos);
-        if (problema) { quitarFoto(); return res.status(400).json({ error: problema }); }
+        if (problema) return res.status(400).json({ error: problema });
+
+        // Todo es válido: ahora sí se sube la foto
+        const subida = await subirFoto(req.file.buffer);
 
         const nueva = await Resena.create({
             id_usuario: idUsuario(req),
             id_pedido: idPedido,
             id_producto: idProducto,
-            foto: req.file.filename,
+            foto: subida.secure_url,
             ...campos
         });
         const completa = await Resena.findByPk(nueva.id_resena, { include: [conProducto] });
         res.status(201).json(aDTO(req, completa));
-    } catch (e) { quitarFoto(); errorServidor(res, e); }
+    } catch (e) { errorServidor(res, e); }
 });
 
 // ---------- Editar ----------
 router.put("/:id", auth, upload.single("foto"), async (req, res) => {
-    const quitarFoto = () => req.file && borrarArchivo(req.file.filename);
     try {
         const r = await Resena.findOne({
             where: { id_resena: req.params.id, id_usuario: idUsuario(req) },
             include: [conProducto]
         });
-        if (!r) { quitarFoto(); return res.status(404).json({ error: "Reseña no encontrada." }); }
+        if (!r) return res.status(404).json({ error: "Reseña no encontrada." });
 
         const campos = leerCampos(req.body);
         const problema = validar(campos);
-        if (problema) { quitarFoto(); return res.status(400).json({ error: problema }); }
+        if (problema) return res.status(400).json({ error: problema });
 
         const fotoAnterior = r.foto;
         r.set(campos);
-        if (req.file) r.foto = req.file.filename;
+        if (req.file) {
+            const subida = await subirFoto(req.file.buffer);
+            r.foto = subida.secure_url;
+        }
         await r.save();
-        if (req.file) borrarArchivo(fotoAnterior);
+        if (req.file) borrarFoto(fotoAnterior);
         res.json(aDTO(req, r));
-    } catch (e) { quitarFoto(); errorServidor(res, e); }
+    } catch (e) { errorServidor(res, e); }
 });
 
 // ---------- Eliminar ----------
@@ -196,7 +215,7 @@ router.delete("/:id", auth, async (req, res) => {
         if (!r) return res.status(404).json({ error: "Reseña no encontrada." });
         const foto = r.foto;
         await r.destroy();
-        borrarArchivo(foto);
+        borrarFoto(foto);
         res.status(204).end();
     } catch (e) { errorServidor(res, e); }
 });
