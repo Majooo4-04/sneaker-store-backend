@@ -38,3 +38,6 @@ coverage/
 src/uploads/
 
 src/uploads/
+
+.env
+src/uploads/
