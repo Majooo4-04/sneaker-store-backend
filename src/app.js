@@ -11,6 +11,7 @@ const dashboardRoutes = require("./routes/dashboard.routes.js");
 const dispositivoRoutes = require("./routes/dispositivo.routes");
 const inventarioRoutes = require("./routes/inventario.routes");
 const resenaRoutes = require("./routes/resena.routes");
+const soporteRoutes = require("./routes/soporte.routes");
 const path = require("path");
 
 const app = express();
@@ -54,6 +55,7 @@ app.use("/api/admin",  dashboardRoutes);
 app.use("/api/dispositivos", dispositivoRoutes);
 app.use("/api/inventario", inventarioRoutes);
 app.use("/api/resenas", resenaRoutes);
+app.use("/api/soporte", soporteRoutes);
 
 
 // ===============================

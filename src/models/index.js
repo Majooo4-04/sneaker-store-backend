@@ -15,6 +15,8 @@ const Marca = require("./Marca");
 const MovimientoInventario = require("./Movimientoinventario");
 const DispositivoVinculado = require("./DispositivoVinculado");
 const Resena = require("./Resena");
+const Reporte = require("./Reporte");
+const MensajeReporte = require("./MensajeReporte");
 
 // ======================================
 // USUARIO - PEDIDO
@@ -216,7 +218,14 @@ MovimientoInventario.belongsTo(Producto,{
     as:"producto"
 
 });
-
+Usuario.hasMany(Reporte, { foreignKey: "id_usuario", as: "reportes" });
+Reporte.belongsTo(Usuario, { foreignKey: "id_usuario", as: "cliente" });
+Reporte.belongsTo(Usuario, { foreignKey: "id_agente", as: "agente" });
+Reporte.belongsTo(Producto, { foreignKey: "id_producto", as: "producto" });
+Reporte.belongsTo(Pedido, { foreignKey: "id_pedido", as: "pedido" });
+Reporte.hasMany(MensajeReporte, { foreignKey: "id_reporte", as: "mensajes" });
+MensajeReporte.belongsTo(Reporte, { foreignKey: "id_reporte", as: "reporte" });
+MensajeReporte.belongsTo(Usuario, { foreignKey: "id_emisor", as: "emisor" });
 // ======================================
 // USUARIO - DISPOSITIVO VINCULADO
 // ======================================
@@ -262,6 +271,8 @@ module.exports = {
 
     MovimientoInventario,
     DispositivoVinculado,
-    Resena
+    Resena,
+    Reporte,
+    MensajeReporte
 
 };
