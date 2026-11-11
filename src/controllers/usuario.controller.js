@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 // ===============================
 
 exports.registrarUsuario = async (req, res) => {
-console.log("BODY RECIBIDO:", req.body);
+// console.log("BODY RECIBIDO:", req.body);
     try {
 
         const {
