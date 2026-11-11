@@ -1,0 +1,54 @@
+
+C:\tenis\Backend\src\config\database.js
+  4:1  warning  Unexpected console statement  no-console
+  5:1  warning  Unexpected console statement  no-console
+  6:1  warning  Unexpected console statement  no-console
+  7:1  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\controllers\carrito.controller.js
+  18:9  warning  Unexpected console statement  no-console
+  72:9  warning  Unexpected console statement  no-console
+  74:9  warning  Unexpected console statement  no-console
+  97:9  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\controllers\dashboard.controller.js
+    6:7   warning  'Marca' is assigned a value but never used               no-unused-vars
+    8:9   warning  'validarDispositivo' is assigned a value but never used  no-unused-vars
+  174:9   warning  Unexpected console statement                             no-console
+  228:15  warning  'id_usuario' is assigned a value but never used          no-unused-vars
+
+C:\tenis\Backend\src\controllers\dispositivo.controller.js
+  12:9  warning  Unexpected console statement  no-console
+  13:9  warning  Unexpected console statement  no-console
+  75:9  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\controllers\usuario.controller.js
+  490:5  warning  Unexpected console statement  no-console
+  491:5  warning  Unexpected console statement  no-console
+  617:9  warning  Unexpected console statement  no-console
+  618:9  warning  Unexpected console statement  no-console
+  619:9  warning  Unexpected console statement  no-console
+  625:9  warning  Unexpected console statement  no-console
+  639:9  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\middleware\auth.js
+  37:9  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\routes\resena.routes.js
+  81:5  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\routes\soporte.routes.js
+  77:5  warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\server.js
+  12:9   warning  Unexpected console statement  no-console
+  15:13  warning  Unexpected console statement  no-console
+  18:9   warning  Unexpected console statement  no-console
+
+C:\tenis\Backend\src\services\tokenTemporal.service.js
+  22:9   warning  Unexpected console statement  no-console
+  25:13  warning  Unexpected console statement  no-console
+  32:9   warning  Unexpected console statement  no-console
+
+Ô£û 31 problems (0 errors, 31 warnings)
+
