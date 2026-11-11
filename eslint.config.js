@@ -6,6 +6,7 @@ module.exports = [
   {
     files: ["src/**/*.js"],
     languageOptions: { sourceType: "commonjs", globals: { ...globals.node } },
-    rules: { "no-console": "warn", "no-unused-vars": "warn", eqeqeq: "warn" }
+    rules: { "no-console": ["warn", { allow: ["error"] }], "no-unused-vars": "warn", eqeqeq: "warn" }
+    
   }
 ];

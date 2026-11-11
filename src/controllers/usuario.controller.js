@@ -180,10 +180,13 @@ exports.login = async(req,res)=>{
     try{
 
 
-        const {
-            correo,
-            password
-        } = req.body;
+       const { correo, password } = req.body || {};
+
+if (typeof correo !== "string" || typeof password !== "string" || !correo.trim() || !password) {
+    return res.status(400).json({
+        mensaje: "Correo y contraseña son obligatorios"
+    });
+}
 
 
 
@@ -199,11 +202,9 @@ exports.login = async(req,res)=>{
 
         if(!usuario){
 
-            return res.status(404).json({
-
-                mensaje:"Usuario no encontrado"
-
-            });
+            return res.status(401).json({
+    mensaje: "Correo o contraseña incorrectos"
+});
 
         }
 
@@ -284,15 +285,9 @@ exports.login = async(req,res)=>{
 
 
 
-    }catch(error){
-
-        res.status(500).json({
-
-            mensaje:"Error al iniciar sesión",
-            error:error.message
-
-        });
-
+        } catch (error) {
+        console.error("Error al iniciar sesión:", error.message);
+        res.status(500).json({ mensaje: "Error al iniciar sesión" });
     }
 
 };
@@ -349,11 +344,9 @@ exports.obtenerUsuario = async(req,res)=>{
 
         if(!usuario){
 
-            return res.status(404).json({
-
-                mensaje:"Usuario no encontrado"
-
-            });
+            return res.status(401).json({
+    mensaje: "Correo o contraseña incorrectos"
+});
 
         }
 
