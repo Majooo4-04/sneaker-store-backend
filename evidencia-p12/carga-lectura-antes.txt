@@ -1,0 +1,7 @@
+Calentando servidor (evita contar el arranque en fr├¡o)...
+Calentamiento: 200 en 822 ms
+{"concurrentes":1,"solicitudes":100,"exitosas":100,"errores_pct":0,"rps":4.9,"promedio_ms":205.6,"p90_ms":286.7,"p95_ms":306.9,"max_ms":1017.2,"duracion_s":20.56,"bytes_resp":1394,"codigos":{"200":100}}
+{"concurrentes":10,"solicitudes":100,"exitosas":100,"errores_pct":0,"rps":56.8,"promedio_ms":163.2,"p90_ms":300.5,"p95_ms":359,"max_ms":467.2,"duracion_s":1.76,"bytes_resp":1394,"codigos":{"200":100}}
+{"concurrentes":25,"solicitudes":100,"exitosas":100,"errores_pct":0,"rps":62.4,"promedio_ms":359.9,"p90_ms":614.3,"p95_ms":667.6,"max_ms":681.9,"duracion_s":1.6,"bytes_resp":1394,"codigos":{"200":100}}
+{"concurrentes":50,"solicitudes":100,"exitosas":100,"errores_pct":0,"rps":62,"promedio_ms":638.7,"p90_ms":877.7,"p95_ms":957.8,"max_ms":1063.6,"duracion_s":1.61,"bytes_resp":1394,"codigos":{"200":100}}
+Guardado en evidencia-p12/carga-antes.json

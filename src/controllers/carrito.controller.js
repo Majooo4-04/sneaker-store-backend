@@ -277,37 +277,33 @@ exports.agregarProducto = async(req,res)=>{
 
         if(detalle){
 
+    // H-19: incremento atómico en la base de datos (evita perder actualizaciones)
+    const { Op, literal } = require("sequelize");
+    const incremento = Number(cantidad);
 
+    if(!Number.isInteger(incremento)){
+        return res.status(400).json({
+            mensaje:"La cantidad debe ser un número entero"
+        });
+    }
 
-            const nuevaCantidad =
-            detalle.cantidad + cantidad;
+    const [filasActualizadas] = await DetalleCarrito.update(
+        { cantidad: literal(`cantidad + ${incremento}`) },
+        { where: {
+            id_detalle: detalle.id_detalle,
+            cantidad: { [Op.lte]: producto.stock - incremento }
+        } }
+    );
 
+    if(filasActualizadas === 0){
+        return res.status(400).json({
+            mensaje:"La cantidad supera el stock disponible"
+        });
+    }
 
+    detalle = await DetalleCarrito.findByPk(detalle.id_detalle);
 
-            if(producto.stock < nuevaCantidad){
-
-
-                return res.status(400).json({
-
-                    mensaje:"La cantidad supera el stock disponible"
-
-                });
-
-
-            }
-
-
-
-
-            detalle.cantidad = nuevaCantidad;
-
-
-
-            await detalle.save();
-
-
-
-        }else{
+}else{
 
 
             detalle = await DetalleCarrito.create({
