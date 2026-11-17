@@ -1,0 +1,4 @@
+Calentando servidor (evita contar el arranque en frio)...
+Calentamiento: 201 en 582 ms
+{"concurrentes":10,"solicitudes":90,"exitosas":90,"errores_pct":0,"rps":20.9,"promedio_ms":468.8,"p90_ms":761.2,"p95_ms":983.5,"max_ms":989,"duracion_s":4.31,"bytes_resp":140,"codigos":{"201":90}}
+Guardado en evidencia-p12/carga-escritura-despues-c10.json

@@ -1,0 +1,23 @@
+{
+  "url": "https://sneaker-store-backend-f4ki.onrender.com/api/carritos",
+  "metodo": "POST",
+  "fecha": "2026-11-13T01:30:32.623Z",
+  "resultados": [
+    {
+      "concurrentes": 10,
+      "solicitudes": 90,
+      "exitosas": 90,
+      "errores_pct": 0,
+      "rps": 20.9,
+      "promedio_ms": 468.8,
+      "p90_ms": 761.2,
+      "p95_ms": 983.5,
+      "max_ms": 989,
+      "duracion_s": 4.31,
+      "bytes_resp": 140,
+      "codigos": {
+        "201": 90
+      }
+    }
+  ]
+}
